@@ -13,11 +13,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Book {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id // 기본키 설정
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO_INCREMENT
     private Long id;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 50) // nullable = false - NOT NULL
     private String writer;
 
     @Column(nullable = false, length = 100)
