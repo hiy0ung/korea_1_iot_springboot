@@ -25,10 +25,10 @@ public class CommentService {
     // 댓글 생성
     public ResponseDto<CommentResponseDto> createComment(CommentRequestDto dto) {
         try {
-            Post post = postRepository.findById(dto.getPostId())
+            Post postId = postRepository.findById(dto.getPostId())
                     .orElseThrow(() -> new Error("해당 게시글을 찾을 수 없습니다: " + dto.getPostId()));
 
-            Comment comment = new Comment(null, post, dto.getContent(), dto.getCommenter());
+            Comment comment = new Comment(null, postId, dto.getContent(), dto.getCommenter());
 
             Comment savedComment = commentRepository.save(comment);
             return ResponseDto.setSuccess("댓글 생성을 성공했습니다.", convertToCommentDto(savedComment));
@@ -41,7 +41,7 @@ public class CommentService {
     public ResponseDto<List<CommentResponseDto>> getCommentsByPost(Long postId) {
         try {
             List<Comment> comments = commentRepository.findByPostId(postId);
-        List<CommentResponseDto> commentResponseDto = comments.stream()
+            List<CommentResponseDto> commentResponseDto = comments.stream()
                 .map(this::convertToCommentDto)
                 .collect(Collectors.toList());
         return ResponseDto.setSuccess("전체 댓글 조회에 성공했습니다.", commentResponseDto);

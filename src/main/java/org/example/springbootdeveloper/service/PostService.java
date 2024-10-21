@@ -27,7 +27,15 @@ public class PostService {
     public ResponseDto<PostResponseDto> createPost(PostRequestDto dto) {
         try {
             Post post = new Post(null, dto.getTitle(), dto.getContent(), dto.getAuthor(), null);
-
+            /*
+                매개변수 유연성을 주기 위해 객체 생성에 사용
+                Post Entity에 @Builder 애노테이션 존재
+                Post post = Post.builder()
+                        .title(dto.getTitle())
+                        .content(dto.getContent())
+                        .author(dto.getAuthor())
+                        .build();
+            */
             Post savedPost = postRepository.save(post);
 
             return ResponseDto.setSuccess("게시글을 성공적으로 등록했습니다.", convertToPostDto(savedPost));
@@ -42,7 +50,13 @@ public class PostService {
             List<Post> posts = postRepository.findAll();
             List<PostResponseDto> postResponseDto = posts.stream()
                     .map(this::convertToPostDto)
+                    // .map((post) -> convertToPostDto(post))
                     .collect(Collectors.toList());
+
+            // 등록된 게시물이 없을 때
+            if (postResponseDto.isEmpty()) {
+                return ResponseDto.setFailed("등록된 게시글이 없습니다.");
+            }
             return ResponseDto.setSuccess("게시글을 성공적으로 조회했습니다.", postResponseDto);
         } catch (Exception e) {
             return ResponseDto.setFailed("게시글 조회에 실패했습니다." + e.getMessage());
@@ -56,7 +70,7 @@ public class PostService {
                     .orElseThrow(() -> new Error("해당 게시글을 찾을 수 없습니다: " + postId));
             return ResponseDto.setSuccess("게시글 조회에 성공했습니다.", convertToPostDto(post));
         } catch (Exception e) {
-            return ResponseDto.setFailed("게시글 조회에 실패했습니다."+ e.getMessage());
+            return ResponseDto.setFailed("게시글 조회에 실패했습니다." + e.getMessage());
         }
     }
 
@@ -66,10 +80,10 @@ public class PostService {
             List<Post> posts = postRepository.findByAuthor(Author);
             return ResponseDto.setSuccess(Author + "의 게시글 조회에 성공했습니다."
                     , posts.stream()
-                    .map(this::convertToPostDto)
-                    .collect(Collectors.toList()));
+                            .map(this::convertToPostDto)
+                            .collect(Collectors.toList()));
         } catch (Exception e) {
-            return ResponseDto.setFailed(Author + "의 게시글 조회에 실패했습니다."+ e.getMessage());
+            return ResponseDto.setFailed(Author + "의 게시글 조회에 실패했습니다." + e.getMessage());
         }
     }
 
@@ -103,24 +117,28 @@ public class PostService {
         // 게시글에 연결된 댓글들을 가져옴
         List<CommentResponseDto> commentResponseDto = commentRepository.findByPostId(post.getId())
                 .stream()
-                .map(this::convertCommentToDto)
+                .map(comment -> new CommentResponseDto(
+                        comment.getId(), post.getId(), comment.getContent(),
+                        comment.getCommenter()))
                 .collect(Collectors.toList());
 
         PostResponseDto postResponseDto = new PostResponseDto(
-            post.getId(),
-            post.getTitle(),
-            post.getContent(),
-            post.getAuthor(),
-            commentResponseDto
+                post.getId(),
+                post.getTitle(),
+                post.getContent(),
+                post.getAuthor(),
+                commentResponseDto
         );
         return postResponseDto;
     }
+}
 
     // Entity(Comment) -> CommentResponseDto 변환
-    private CommentResponseDto convertCommentToDto(Comment comment) {
-        return new CommentResponseDto(
-                comment.getId(), comment.getPost().getId(),
-                comment.getContent(), comment.getCommenter()
-        );
-    }
-}
+//    private CommentResponseDto convertCommentToDto(Comment comment) {
+//        return new CommentResponseDto(
+//                comment.getId(), comment.getPost().getId(),
+//                comment.getContent(), comment.getCommenter()
+//        );
+//    }
+// CommentResponseDto 미리 생성하면 .map(this::convertResponseDto) 대체 가능
+// == .map((comment) -> convertCommentToDto(comment))

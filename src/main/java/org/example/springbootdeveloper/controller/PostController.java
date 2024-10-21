@@ -17,6 +17,7 @@ public class PostController {
     private PostService postService;
 
     // CRUD 기능 명시
+
     @PostMapping
     public ResponseDto<PostResponseDto> createPost(@RequestBody PostRequestDto dto) {
         return postService.createPost(dto);
