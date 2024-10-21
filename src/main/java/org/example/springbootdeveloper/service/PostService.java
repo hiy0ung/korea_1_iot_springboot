@@ -4,7 +4,6 @@ import org.example.springbootdeveloper.dto.request.PostRequestDto;
 import org.example.springbootdeveloper.dto.response.CommentResponseDto;
 import org.example.springbootdeveloper.dto.response.PostResponseDto;
 import org.example.springbootdeveloper.dto.response.ResponseDto;
-import org.example.springbootdeveloper.entity.Comment;
 import org.example.springbootdeveloper.entity.Post;
 import org.example.springbootdeveloper.repository.CommentRepository;
 import org.example.springbootdeveloper.repository.PostRepository;

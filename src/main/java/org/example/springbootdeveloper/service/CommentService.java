@@ -29,6 +29,13 @@ public class CommentService {
                     .orElseThrow(() -> new Error("해당 게시글을 찾을 수 없습니다: " + dto.getPostId()));
 
             Comment comment = new Comment(null, postId, dto.getContent(), dto.getCommenter());
+            /*
+                Comment comment = Comment.builder()
+                                .postId(dto.getPostId())
+                                .content(dto.getContent())
+                                .commenter(dto.getCommenter())
+                                .build();
+            */
 
             Comment savedComment = commentRepository.save(comment);
             return ResponseDto.setSuccess("댓글 생성을 성공했습니다.", convertToCommentDto(savedComment));
@@ -43,6 +50,7 @@ public class CommentService {
             List<Comment> comments = commentRepository.findByPostId(postId);
             List<CommentResponseDto> commentResponseDto = comments.stream()
                 .map(this::convertToCommentDto)
+                 // .map((comment) -> convertToCommentDto(comment))
                 .collect(Collectors.toList());
         return ResponseDto.setSuccess("전체 댓글 조회에 성공했습니다.", commentResponseDto);
         } catch (Exception e) {
