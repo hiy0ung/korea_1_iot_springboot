@@ -32,6 +32,13 @@ public class PostController {
         return postService.getPostById(postId);
     }
 
+    // 작성자를 사용하여 게시글 조회 - 필터링
+    @GetMapping("/search/author")
+    public ResponseDto<List<PostResponseDto>> getPostByAuthor(@RequestParam String Author) {
+        return postService.getPostByAuthor(Author);
+
+    }
+
     @PutMapping("/{postId}")
     public ResponseDto<PostResponseDto> updatePost(
             @PathVariable Long postId,

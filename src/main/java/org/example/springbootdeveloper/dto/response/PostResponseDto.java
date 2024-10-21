@@ -1,10 +1,13 @@
 package org.example.springbootdeveloper.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.example.springbootdeveloper.entity.Comment;
 
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class PostResponseDto {
     private long id;
     private String title;
