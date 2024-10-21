@@ -122,14 +122,13 @@ public class PostService {
                         comment.getCommenter()))
                 .collect(Collectors.toList());
 
-        PostResponseDto postResponseDto = new PostResponseDto(
+        return new PostResponseDto(
                 post.getId(),
                 post.getTitle(),
                 post.getContent(),
                 post.getAuthor(),
                 commentResponseDto
         );
-        return postResponseDto;
     }
 }
 
