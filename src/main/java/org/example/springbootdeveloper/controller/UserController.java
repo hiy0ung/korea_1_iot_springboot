@@ -11,12 +11,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
+// final, nonNull 설정된 필드를 필수 매개변수로 하는 생성자를 만드는 애너테이션
 @RequiredArgsConstructor
 public class UserController {
 
+    // 1. 생성자 의존성 주입 방식
     private final UserService userService;
 
+//    public UserController(UserService userService) {
+//        this.userService = userService;
+//    } >> @RequiredArgsConstructor로 대체 가능
+
+    // 2. 필드 의존성 주입 방식
+//    @Autowired
+//    private UserService userService;
+
+    // HTTP 메서드: POST
+    // URI 경로: /signup
+    // - 회원 가입 로직: username, password, email
     @PostMapping("/signup")
     public ResponseDto<String> signup(@RequestBody UserRequestDto dto) {
         try {
@@ -27,6 +40,17 @@ public class UserController {
         }
     }
 
+    // HTTP 메서드: POST
+    // URI 경로: /login
+    // - 로그인 로직: username, password
+
+    // cf) 로그인 시 HTTP 메서드 사용
+
+    // GET VS "POST"
+    // : POST 사용을 권장
+    // - 로그인 과정에서 사용자 이름과 비밀번호 같은 민감한 데이터를 서버로 전송하기 때문에 (@RequestBody에 담아서 가져와야함)
+    // - GET 요청을 URL에 데이터가 노출됨
+    //      : 데이터 조회에 사용
     @PostMapping("/login")
     public ResponseDto<String> login(@RequestBody UserLoginRequestDto dto) {
         try {

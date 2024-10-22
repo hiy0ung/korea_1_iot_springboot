@@ -36,7 +36,6 @@ public class CommentService {
                                 .commenter(dto.getCommenter())
                                 .build();
             */
-
             Comment savedComment = commentRepository.save(comment);
             return ResponseDto.setSuccess("댓글 생성을 성공했습니다.", convertToCommentDto(savedComment));
         } catch (Exception e) {
