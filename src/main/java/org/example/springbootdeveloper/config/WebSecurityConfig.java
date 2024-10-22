@@ -2,8 +2,6 @@ package org.example.springbootdeveloper.config;
 
 import lombok.RequiredArgsConstructor;
 import org.example.springbootdeveloper.filter.JwtAuthenticationFilter;
-import org.example.springbootdeveloper.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -14,7 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -113,17 +110,16 @@ public class WebSecurityConfig {
             HttpSecurity http,
             // 비 크립트 패스워드 인코더
             // : 비밀번호를 암호화 하는 BCryptPasswordEncoder Bean을 주입
-            BCryptPasswordEncoder bCryptpasswordEncoder,
+            BCryptPasswordEncoder bCryptpasswordEncoder
             // 사용자 세부 정보를 제공하는 UserDetailsService Bean을 주입
-            UserDetailsService userDetailsService,
-            UserService userService
+            // UserDetailsService userDetailsService,
     ) throws Exception {
         // DaoAuthenticationProvider
         // : DB에서 사용자 인증을 처리
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         // .setUserDetailsService()
         // : 사용자 세부 정보를 가져오는 서비스 설정
-        authProvider.setUserDetailsService(userDetailsService);
+        // authProvider.setUserDetailsService(userDetailsService);
         // 비밀번호 암호화 사용
         authProvider.setPasswordEncoder(bCryptpasswordEncoder);
         // ProviderManager: DaoAuthenticationProvider 인증 처리
