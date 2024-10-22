@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.example.springbootdeveloper.dto.request.UserLoginRequestDto;
 import org.example.springbootdeveloper.dto.request.UserRequestDto;
 import org.example.springbootdeveloper.dto.response.ResponseDto;
+import org.example.springbootdeveloper.dto.response.UserLoginResponseDto;
 import org.example.springbootdeveloper.service.UserService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     // 1. 생성자 의존성 주입 방식
-    private final UserService userService;
+    private final @Lazy UserService userService;
 
 //    public UserController(UserService userService) {
 //        this.userService = userService;
@@ -52,9 +54,9 @@ public class UserController {
     // - GET 요청을 URL에 데이터가 노출됨
     //      : 데이터 조회에 사용
     @PostMapping("/login")
-    public ResponseDto<String> login(@RequestBody UserLoginRequestDto dto) {
+    public ResponseDto<UserLoginResponseDto> login(@RequestBody UserLoginRequestDto dto) {
         try {
-            String result = userService.login(dto);
+            UserLoginResponseDto result = userService.login(dto);
             return ResponseDto.setSuccess("Login Successful", result);
         } catch (Exception e) {
             return ResponseDto.setFailed("Login failed: " + e.getMessage());

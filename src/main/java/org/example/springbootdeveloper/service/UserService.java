@@ -3,8 +3,14 @@ package org.example.springbootdeveloper.service;
 import lombok.RequiredArgsConstructor;
 import org.example.springbootdeveloper.dto.request.UserLoginRequestDto;
 import org.example.springbootdeveloper.dto.request.UserRequestDto;
+import org.example.springbootdeveloper.dto.response.UserLoginResponseDto;
 import org.example.springbootdeveloper.entity.User;
+import org.example.springbootdeveloper.provider.JwtProvider;
 import org.example.springbootdeveloper.repository.UserRepository;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     // 비즈니스 로직 설계
     // Controller의 요청을 받아 필요한 데이터를 Repository를 통해 얻거나 전달하고
@@ -24,6 +29,16 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
+
+    public UserService(UserRepository userRepository, @Lazy AuthenticationManager authenticationManager
+            , BCryptPasswordEncoder bCryptPasswordEncoder, JwtProvider jwtProvider) {
+        this.userRepository = userRepository;
+        this.authenticationManager = authenticationManager;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.jwtProvider = jwtProvider;
+    }
 
 
     public String signup(UserRequestDto dto) {
@@ -50,7 +65,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public String login(UserLoginRequestDto dto) {
+    public UserLoginResponseDto login(UserLoginRequestDto dto) {
         // 해당 이메일의 유저가 있는지 검색하고, 있을 경우 해당 데이터를 반환
         try {
             User user = userRepository.findByEmail(dto.getEmail())
@@ -63,9 +78,21 @@ public class UserService implements UserDetailsService {
             if (!bCryptPasswordEncoder.matches(dto.getPassword(), user.getPassword())) {
                 throw new RuntimeException("Invalid password");
             }
-            return "로그인이 성공적으로 완료되었습니다.";
+
+            // 사용자 인증 처리(실패 시 예외가 발생)
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            dto.getEmail(),
+                            dto.getPassword()
+                    )
+            );
+
+            // 인증 성공 후 JWT 토큰 생성
+            String token = jwtProvider.generateJwtToken(dto.getEmail());
+
+            return new UserLoginResponseDto(token);
         } catch (Exception e) {
-            return "로그인에 실패하였습니다: " + e.getMessage();
+            return null;
         }
 
     }
