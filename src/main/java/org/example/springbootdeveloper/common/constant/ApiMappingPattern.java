@@ -7,7 +7,10 @@ public class ApiMappingPattern {
 
     // 일반 회원 관련 로직: 회원 조회(단건, 전체, 필터링), 수정, 삭제
     public static final String USER = "/api/users";
+
     public static final String POST = "/api/posts";
     public static final String BOOK = "/api/books";
-//    public static final String GROUP = "/api/group";
+
+    public static final String MENU = "/api/v1/menus";
+//    public static final String GROUP = "/api/v1/group";
 }

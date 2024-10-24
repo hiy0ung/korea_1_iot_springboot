@@ -1,0 +1,32 @@
+Menu_Project
+
+--- Entity ---
+Menu 클래스
+- 고유값: id(Long)
+- 메뉴명: name(String)
+- 메뉴 설명: description(String)
+- 메뉴가격: price(int)
+- 이용가능여부: isAvailable(boolean)
+- 카테고리: category(String)
+- 크기: size(String)
+
+--- 기능 정리 ---
+1. 메뉴 생성
+2. 메뉴 조회(단건)
+3. 메뉴 조회(전체)
+4. 메뉴 수정
+5. 메뉴 삭제
+
+--- 프로젝트 구조 ---
+MenuController
+MenuService
+MenuRepository
+
+Menu
+
+MenuRequestDto
+MenuResponseDto
++) ResponseDto (dto/response)
+
++) ApiMappingPattern (common/constant)
++) ResponseMessage (common/constant)
