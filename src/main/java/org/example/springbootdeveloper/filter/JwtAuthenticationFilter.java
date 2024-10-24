@@ -13,7 +13,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -27,6 +26,7 @@ import java.io.IOException;
 * - OncePerRequestFilter
 * : 모든 요청마다 한 번씩 필터가 실행되도록 보장
 * */
+
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     * doFilterInternal
     * : 요청의 헤더에서 JWT 토큰을 추출
     * : JwtProvider에서 만든 removeBearer()을 호출하여 토큰을 파싱
-    * : JwtProvider를 사용하여 토큰 검증 및 사용자 ID 추출
+    * : JwtProvider를 사용하여 토큰 검증 및 "사용자 ID 추출"
     * : 추출한 사용자 ID를 바탕으로 SecurityContext에 인증 정보를 설정하는 메서드 호출
     * */
     @Override
@@ -67,6 +67,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String userId = jwtProvider.getUserIdFromJwt(token);
 
             // 추출한 사용자 ID를 바탕으로 securityContext에 인증 정보 설정
+            // : setAuthenticationContext()는 요청에서 userId값을 SecurityContext에 인증 정보로 설정
+            // : UsernamePasswordAuthenticationToken을 생성하고, 해당 토큰에 userId값을 넣어 인증 정보로 등록
+            // >> Spring Security는 SecurityContextHolder에 있는 인증 정보를 자동으로
+            //      , 컨트롤러의 메서드에서 주입시킬 수 있음 (@AuthenticationPrincipal)
+
             setAuthenticationContext(request, userId);
 
         } catch (Exception e) {

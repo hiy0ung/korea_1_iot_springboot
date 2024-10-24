@@ -1,6 +1,5 @@
 package org.example.springbootdeveloper.service;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.springbootdeveloper.common.constant.ResponseMessage;
 import org.example.springbootdeveloper.dto.request.MenuRequestDto;
@@ -20,12 +19,13 @@ public class MenuService {
 
     private final MenuRepository menuRepository;
 
-    public ResponseDto<MenuResponseDto> createMenu(MenuRequestDto dto) {
+    public ResponseDto<MenuResponseDto> createMenu(MenuRequestDto dto, String userEmail) {
         MenuResponseDto data = null;
 
         try {
             Menu menu = Menu.builder()
                     .name(dto.getName())
+                    .userEmail(userEmail)
                     .description(dto.getDescription())
                     .price(dto.getPrice())
                     .isAvailable(dto.isAvailable())
@@ -76,10 +76,10 @@ public class MenuService {
 
             // 옵셔널.isPresent()
             // : Optional 안에 값이 존재하는지 확인
-            if (menuOptional.isEmpty()) {
-                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_DATA);
-            } else {
+            if (menuOptional.isPresent()) {
                 data = new MenuResponseDto(menuOptional.get());
+            } else {
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_DATA);
             }
 
         } catch (Exception e) {
@@ -89,15 +89,40 @@ public class MenuService {
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
-    public ResponseDto<MenuResponseDto> updateMenu(Long id, MenuRequestDto dto) {
+
+    public ResponseDto<List<MenuResponseDto>> getMenusByCategory(String category) {
+        List<MenuResponseDto> data = null;
+        String menuCategory = category;
+
+        try {
+            Optional<List<Menu>> optionalMenus = menuRepository.findByCategory(menuCategory);
+
+            if (optionalMenus.isPresent()) {
+                List<Menu> menus = optionalMenus.get();
+                data = menus.stream()
+                        .map((menu) -> new MenuResponseDto(menu))
+                        .collect(Collectors.toList());
+            } else{
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_DATA);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+        }
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
+    }
+
+    public ResponseDto<MenuResponseDto> updateMenu(Long id, String userEmail, MenuRequestDto dto) {
         MenuResponseDto data = null;
         Long menuId = id;
+        String email = userEmail;
 
         try {
             Optional<Menu> menuOptional = menuRepository.findById(menuId);
 
             if (menuOptional.isPresent()) {
                 Menu menu = Menu.builder()
+                        .userEmail(email)
                         .name(dto.getName())
                         .description(dto.getDescription())
                         .price(dto.getPrice())
