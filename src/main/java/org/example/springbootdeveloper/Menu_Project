@@ -22,7 +22,7 @@ MenuController
 MenuService
 MenuRepository
 
-Menu
+Menu - Entity
 
 MenuRequestDto
 MenuResponseDto

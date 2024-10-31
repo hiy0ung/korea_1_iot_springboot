@@ -6,7 +6,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.example.springbootdeveloper.entity.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -33,8 +32,16 @@ import java.util.Date;
 public class JwtProvider {
 
     // 환경 변수에 지정한 비밀키 값과 만료 시간을 가져옴
+
     private final Key key; // JWT 서명에 사용할 암호화 키
-    private final int jwtExpirationMs; // JWT 토큰의 만료 시간을 저장
+
+    @Value("${jwt.expiration}")
+    private int jwtExpirationMs; // JWT 토큰의 만료 시간을 저장
+
+    // 토큰 만료 시간을 밀리초로 반환하는 메서드
+    public int getExpiration() {
+        return jwtExpirationMs;
+    }
 
     public JwtProvider(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration}") int jwtExpirationMs) {
         // 생성자: JWTProvider 객체를 생성할 때 비밀키와 만료 시간을 초기화

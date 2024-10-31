@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping("/api/v1/books")
 @RequiredArgsConstructor
 // 초기화 되지 않은 final 필드나 @NonNull이 붙은 필드에 대해 생성자를 생성
 public class BookController {
