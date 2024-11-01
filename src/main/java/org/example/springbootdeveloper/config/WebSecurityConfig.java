@@ -72,7 +72,7 @@ public class WebSecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true); // 쿠키를 허용할지 여부 - 자격 증명을 포함한 요청 허용 여부
-        config.addAllowedOriginPattern("*"); // 모든 도메인(출처) 허용 - 어디서든지 요청 가능
+        config.addAllowedOriginPattern("*"); // 모든 도메인(출처) 허용 - 어디서든지 요청 가능 (어떤 포트번호든 요청 보내기 가능)
         config.addAllowedHeader("*"); // 모든 헤더 허용
         config.addAllowedMethod("*"); // 모든 HTTP 메서드 허용 (GET, POST, PUT, DELETE 등)
 
@@ -112,7 +112,8 @@ public class WebSecurityConfig {
                                 // : 특정 요청과 일치하는 url에 대한 엑세스
                                 new AntPathRequestMatcher("/api/v1/auth/**"),
                                 new AntPathRequestMatcher("/api/v1/menus/**"),
-                                new AntPathRequestMatcher("/api/v1/books/**")
+                                new AntPathRequestMatcher("/api/v1/books/**"),
+                                new AntPathRequestMatcher("/api/v1/todos/**")
                         )
                         // .permitAll()
                         // : 누구나 접근이 가능하게 설정

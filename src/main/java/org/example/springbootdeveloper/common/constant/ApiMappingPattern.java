@@ -13,4 +13,6 @@ public class ApiMappingPattern {
 
     public static final String MENU = "/api/v1/menus";
 //    public static final String GROUP = "/api/v1/group";
+
+    public static final String TODO = "/api/v1/todos";
 }
