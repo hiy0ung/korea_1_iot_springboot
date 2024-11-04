@@ -8,7 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PutTodoRequestDto {
     @NotNull
-    private String task;
-    @NotNull
     private boolean status;
 }

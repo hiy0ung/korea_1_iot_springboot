@@ -81,6 +81,7 @@ public class w_스프링시큐리티_보충 {
             토큰의 클레임 정보를 추출하여 반환
             JWT 본문에서 사용자 정보와 같은 세부 정보를 읽어옴
 
+
         ================ JwtAuthenticationFilter ================
         1. doFilterInternal
             Authorization 헤더에서 JWT 토큰을 추출하여 검증

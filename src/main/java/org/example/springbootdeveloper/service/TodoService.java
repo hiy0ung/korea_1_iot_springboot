@@ -71,10 +71,8 @@ public class TodoService {
             Optional<Todo> todoOptional = todoRepository.findById(todoId);
 
             if (todoOptional.isPresent()) {
-                Todo todo = Todo.builder()
-                        .task(dto.getTask())
-                        .status(dto.isStatus())
-                        .build();
+                Todo todo = todoOptional.get();
+                todo.setStatus(dto.isStatus());
 
                 todoRepository.save(todo);
                 data = new PutTodoResponseDto(todo);

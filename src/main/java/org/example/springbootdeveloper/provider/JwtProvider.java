@@ -75,7 +75,7 @@ public class JwtProvider {
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 // 현재 시간에 만료 시간을 더해 토큰 만료 시간 설정
                 .signWith(key, SignatureAlgorithm.HS256)
-                // HMAC-SHA256 알고리즘으로 생성된 비밀키로 서명
+                // HMAC-SHA256 알고리즘으로 생성된 비밀키로 서명 (토큰이 위변조 되지 않았는지 확인)
                 .compact();
                 // JWT를 최종적으로 직렬화하여 문자열로 반환
     }
@@ -97,7 +97,7 @@ public class JwtProvider {
     }
 
     /*
-    * JWT에서 Bearer 접두사 제거
+    * JWT에서  Bearer접두사 제거
     *
     * @param bearer Token - 접두사가 포함된 JWT 문자열
     * @return Bearer이 제거된 JWT
