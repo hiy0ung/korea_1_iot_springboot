@@ -17,7 +17,7 @@ public class Menu {
     private Long id; // 메뉴 고유 ID
 
     @NotBlank
-    private String userEmail; // 메뉴를 등록한 사람의 userEmail
+    private String userEmail; // 메뉴를 등록한 사람의 userEmail user_email
 
     @Column(nullable = false, length = 255)
     private String name; // 메뉴명

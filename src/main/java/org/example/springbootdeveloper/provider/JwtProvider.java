@@ -123,7 +123,7 @@ public class JwtProvider {
         // JWT에서 클레임 정보를 추출 - claim 객체에 저장
         Claims claims = getClaims(token);
 
-        // 클레임에서 userId 값을 문자열 형태로 반환
+        // 클레임에서 userId 값을 문자열 형태로 반환 (클래스 안의 문자열 형태로 가져옴 - String.class)
         return claims.get("userId", String.class);
     }
 

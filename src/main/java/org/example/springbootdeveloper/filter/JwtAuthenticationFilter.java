@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
 
     /*
-    * doFilterInternal
+//    * doFilterInternal
     * : 요청의 헤더의 Authorization에서 JWT 토큰을 추출
     * : JwtProvider에서 만든 removeBearer()을 호출하여 토큰을 파싱
     * : JwtProvider를 사용하여 토큰 검증 및 "사용자 ID 추출"

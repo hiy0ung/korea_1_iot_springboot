@@ -15,6 +15,7 @@ public class MenuResponseDto {
     private String category;
     private String size;
 
+    // entity -> responseDto
     public MenuResponseDto(Menu menu) {
         this.id = menu.getId();
         this.userEmail = menu.getUserEmail();
