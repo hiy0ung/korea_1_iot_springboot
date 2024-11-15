@@ -7,12 +7,13 @@ import org.example.springbootdeveloper.dto.response.BookResponseDto;
 import org.example.springbootdeveloper.entity.Category;
 import org.example.springbootdeveloper.service.BookService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/books")
+@RequestMapping("api/v1/books")
 @RequiredArgsConstructor
 // 초기화 되지 않은 final 필드나 @NonNull이 붙은 필드에 대해 생성자를 생성
 public class BookController {
